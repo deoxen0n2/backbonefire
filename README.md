@@ -67,6 +67,18 @@ $ bower install backbonefire --save
 
 Once you've included BackboneFire and its dependencies into your project, you will have access to the `Backbone.Firebase.Collection`, and `Backbone.Firebase.Model` objects.
 
+## CommonJS
+
+```bash
+$ npm install git+https://github.com/deoxen0n2/backbonefire.git --save
+```
+
+And in the code:
+
+```js
+var Backbone = require('backbonefire');
+var Todos = Backbone.Firebase.Collection.extend({ ... });
+```
 
 ## Getting Started with Firebase
 
