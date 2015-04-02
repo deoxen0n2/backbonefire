@@ -541,7 +541,14 @@ if (typeof exports !== 'undefined') {
     SyncCollection.protoype = {
       add: function(models, options) {
         // prepare models
-        var parsed = this._parseModels(models);
+        var parsed;
+        try {
+          parsed = this._parseModels(models);
+        } catch (err) {
+          this.trigger('invalid', this, err);
+          return [];
+        }
+
         options = options ? _.clone(options) : {};
         options.success =
           _.isFunction(options.success) ? options.success : function() {};
@@ -641,6 +648,9 @@ if (typeof exports !== 'undefined') {
 
         for (var i = 0; i < models.length; i++) {
           var model = models[i];
+
+          var backboneModel = new this.baseModel(model);
+          if (!backboneModel.isValid()) { throw new Error('Model Invalid'); }
 
           // XXX model prototype broken: this.model.prototype.idAttribute worked around as this.idAttribute
           model[this.idAttribute] = model[this.idAttribute] || Backbone.Firebase._getKey(this.firebase.push());
@@ -866,6 +876,8 @@ if (typeof exports !== 'undefined') {
         return newItem;
 
       };
+
+      this.baseModel = BaseModel;
 
     },
 
